@@ -1,13 +1,16 @@
-FROM debian:wheezy
-MAINTAINER qida <sunqida@foxmail.com>
- 
-#fakaixin
-#RUN echo "deb http://ftp.us.debian.org/debian/ wheezy-backports main" >> /etc/apt/sources.list
+FROM ubuntu:trusty
 
-RUN apt-get update
-RUN apt-get install -y python-pip
-RUN apt-get install 
-RUN apt-get autoclean && \
-RUN apt-get autoremove && \
-RUN pip install shadowsocks==2.8.2
 
+
+RUN apt-get update && \
+    apt-get install -y --force-yes -m python-pip python-m2crypto &&\
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install shadowsocks
+
+
+RUN sudo ssserver -p 443 -k shanlfn -m rc4-md5 --user nobody -d start
+
+
+EXPOSE 443
